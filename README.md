@@ -509,3 +509,83 @@ class ListMockTest {
 
 ```
 
+---
+
+## REST controller test
+
+### Enough basics, now let's start testing our rest controller class
+
+### STEP 1 : Make a contoller class
+
+#### HelloWorldController.java
+
+```java
+
+package com.rtb.unittesting.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloWorldController {
+
+	@GetMapping("/hello-world")
+	public String helloWorld() {
+		
+		return "Hello World";
+	}
+}
+
+```
+
+#### HelloWorldControllerTest.java
+
+```java
+
+package com.rtb.unittesting.controller;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+// here we will use MockMvcTest and will invoke only the HelloWorldController class
+@WebMvcTest(HelloWorldController.class)
+public class HelloWorldControllerTest {
+
+
+	// Spring already have bean for MockMvc so we just need to use @Autowired and MockMvc  will be instantiated
+	@Autowired
+	private MockMvc mockMvc;
+	
+	@Test
+	public void helloWorld_basic() throws Exception {
+		
+		/*
+		* Here we are making GET request with the endpoint /hello-world
+		* And we are accepting the JSON response
+		* After builiding a request we are performiing that request and returing the reponse to MvcResult
+		* For getting the content as String we are calling the result.getReponse().getContentAsString() mehthod
+		* After that we are verifying the result
+		*/
+		
+		// call GET  "/hello-world"
+		RequestBuilder request = MockMvcRequestBuilders.get("/hello-world")
+				.accept(MediaType.APPLICATION_JSON);
+		
+		MvcResult result = mockMvc.perform(request).andReturn();
+		
+		String contentString = result.getResponse().getContentAsString();
+		
+		// verify "Hello World"
+		assertEquals("Hello World", contentString);
+	}
+}
+
+```
