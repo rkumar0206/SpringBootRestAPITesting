@@ -1,4 +1,4 @@
-package com.rtb.unittesting.buiness;
+package com.rtb.unittesting.business;
 
 import static org.junit.jupiter.api.Assertions.*;
 

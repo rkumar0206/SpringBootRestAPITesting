@@ -1,0 +1,1 @@
+create table item (id integer not null, name varchar(255), price integer, quantity integer, primary key (id))

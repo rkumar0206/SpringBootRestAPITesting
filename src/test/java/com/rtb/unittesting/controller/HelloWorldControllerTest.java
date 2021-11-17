@@ -1,6 +1,8 @@
 package com.rtb.unittesting.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,10 @@ public class HelloWorldControllerTest {
 		RequestBuilder request = MockMvcRequestBuilders.get("/hello-world")
 				.accept(MediaType.APPLICATION_JSON);
 		
-		MvcResult result = mockMvc.perform(request).andReturn();
+		MvcResult result = mockMvc.perform(request)
+				.andExpect(status().isOk()) // we can also use status().is(200)
+				//.andExpect(content().string("Hello world"))
+				.andReturn();
 		
 		String contentString = result.getResponse().getContentAsString();
 		
